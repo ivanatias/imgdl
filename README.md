@@ -28,3 +28,5 @@ Providing a path where images should be saved:
 `./imgdl -from /path/to/text.txt -to /path/where/images/are/saved`
 
 Note that while the `to` flag is optional, `from` is required. 
+
+You can run `./imgdl -help` to see all available options.
