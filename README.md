@@ -6,8 +6,8 @@ CLI tool built using Go to download images from a `.txt` file containing all the
 
 To install, follow these steps:
 
-- Clone the repository: git clone https://github.com/ivanatias/imgdl.git
-- Navigate to the cloned directory: cd imgdl
+- Clone the repository: `git clone https://github.com/ivanatias/imgdl.git`
+- Navigate to the cloned directory: `cd imgdl`
 - Install the tool using Go: `go install`
 
 ### Important: 
