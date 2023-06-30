@@ -81,9 +81,9 @@ func main() {
 			defer response.Body.Close()
 
 			contentType := response.Header.Get("Content-Type")
-			contentSlice := strings.Split(contentType, "/")
+			isImage := strings.Split(contentType, "/")[0] == "image"
 
-			if contentSlice[0] != "image" {
+			if !isImage {
 				yellow.Printf(
 					"Skipping resource %s because it's not an image\n",
 					imageUrl,
