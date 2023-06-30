@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 
 	"github.com/fatih/color"
 )
@@ -61,50 +62,62 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
+	var wg sync.WaitGroup
+
 	for scanner.Scan() {
 		imageUrl := scanner.Text()
-		response, err := http.Get(imageUrl)
 
-		if err != nil {
-			panic(err)
-		}
+		wg.Add(1)
 
-		defer response.Body.Close()
+		go func(url string) {
+			defer wg.Done()
 
-		contentType := response.Header.Get("Content-Type")
-		contentSlice := strings.Split(contentType, "/")
+			response, err := http.Get(imageUrl)
 
-		if contentSlice[0] != "image" {
-			yellow.Printf(
-				"Skipping resource %s because it's not an image\n",
-				imageUrl,
-			)
+			if err != nil {
+				panic(err)
+			}
 
-			continue
-		}
+			defer response.Body.Close()
 
-		imageData, err := io.ReadAll(response.Body)
+			contentType := response.Header.Get("Content-Type")
+			contentSlice := strings.Split(contentType, "/")
 
-		if err != nil {
-			panic(err)
-		}
+			if contentSlice[0] != "image" {
+				yellow.Printf(
+					"Skipping resource %s because it's not an image\n",
+					imageUrl,
+				)
 
-		imageFilename := filepath.Base(imageUrl)
+				return
+			}
 
-		err = os.MkdirAll(to, 0755)
+			imageData, err := io.ReadAll(response.Body)
 
-		if err != nil {
-			panic(err)
-		}
+			if err != nil {
+				panic(err)
+			}
 
-		err = os.WriteFile(filepath.Join(to, imageFilename), imageData, 0644)
+			imageFilename := filepath.Base(imageUrl)
 
-		if err != nil {
-			panic(err)
-		}
+			err = os.MkdirAll(to, 0755)
 
-		cyan.Printf("Saved %s\n", imageFilename)
+			if err != nil {
+				panic(err)
+			}
+
+			err = os.WriteFile(filepath.Join(to, imageFilename), imageData, 0644)
+
+			if err != nil {
+				panic(err)
+			}
+
+			cyan.Printf("Saved %s\n", imageFilename)
+
+		}(imageUrl)
 	}
+
+	wg.Wait()
 
 	green.Printf("\nAll images saved on %s\n", to)
 }
