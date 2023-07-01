@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+
+	"github.com/ivanatias/imgdl/colors"
 )
 
 func getFilename(urlString string) (string, error) {
@@ -35,7 +37,7 @@ func DownloadAndSave(resourceUrl, savePath string) {
 	response, err := http.Get(resourceUrl)
 
 	if err != nil {
-		Red.Println("Unable to download:", resourceUrl)
+		colors.Red.Println("Unable to download:", resourceUrl)
 
 		return
 	}
@@ -46,7 +48,7 @@ func DownloadAndSave(resourceUrl, savePath string) {
 	isImage := strings.Split(contentType, "/")[0] == "image"
 
 	if !isImage {
-		Yellow.Printf(
+		colors.Yellow.Printf(
 			"Skipping resource %s because it's not an image\n",
 			resourceUrl,
 		)
@@ -57,7 +59,7 @@ func DownloadAndSave(resourceUrl, savePath string) {
 	imageData, err := io.ReadAll(response.Body)
 
 	if err != nil {
-		Red.Println("Unable to read image:", resourceUrl)
+		colors.Red.Println("Unable to read image:", resourceUrl)
 
 		return
 	}
@@ -65,7 +67,7 @@ func DownloadAndSave(resourceUrl, savePath string) {
 	imageFilename, err := getFilename(resourceUrl)
 
 	if err != nil || len(imageFilename) == 0 {
-		Red.Println("Unable to save image from:", resourceUrl)
+		colors.Red.Println("Unable to save image from:", resourceUrl)
 
 		return
 	}
@@ -73,10 +75,10 @@ func DownloadAndSave(resourceUrl, savePath string) {
 	err = os.WriteFile(filepath.Join(savePath, imageFilename), imageData, 0644)
 
 	if err != nil {
-		Red.Println("Unable to save image from:", resourceUrl)
+		colors.Red.Println("Unable to save image from:", resourceUrl)
 
 		return
 	}
 
-	Cyan.Printf("Saved %s\n", imageFilename)
+	colors.Cyan.Printf("Saved %s\n", imageFilename)
 }

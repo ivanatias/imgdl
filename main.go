@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/ivanatias/imgdl/colors"
 	"github.com/ivanatias/imgdl/utils"
 )
 
@@ -80,5 +81,5 @@ func main() {
 
 	elapsed := time.Since(now).Milliseconds()
 
-	utils.Green.Printf("\nImages saved on %s (%dms)\n", to, elapsed)
+	colors.Green.Printf("\nImages saved on %s (%dms)\n", to, elapsed)
 }
