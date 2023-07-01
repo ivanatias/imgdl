@@ -30,3 +30,15 @@ Providing a path where images should be saved:
 Note that while the `to` flag is optional, `from` is required. 
 
 You can run `./imgdl -help` to see all available options.
+
+## Performance
+
+![Speed test](./test.png)
+
+It takes an average time of 30-35 seconds to download and save 600 images. However, this time can vary based on various factors such as:
+
+- Network Speed: If the network speed is slow, it may take longer to download each image, resulting in increased overall download time.
+
+- Image Size: Larger images will take more time to download and save compared to smaller ones. Therefore, if the images being downloaded have varying sizes, the download time will vary accordingly.
+
+- Server Response Time: If the server from which the images are being downloaded has high response time, it can increase the overall download time.
