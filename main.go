@@ -7,12 +7,14 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/ivanatias/imgdl/utils"
 )
 
 func main() {
 	var from, to string
+	now := time.Now()
 
 	cwd, err := os.Getwd()
 
@@ -51,6 +53,12 @@ func main() {
 
 	defer file.Close()
 
+	err = os.MkdirAll(to, 0755)
+
+	if err != nil {
+		panic(err)
+	}
+
 	scanner := bufio.NewScanner(file)
 
 	var wg sync.WaitGroup
@@ -70,5 +78,7 @@ func main() {
 
 	wg.Wait()
 
-	utils.Green.Printf("\nImages saved on %s\n", to)
+	elapsed := time.Since(now).Milliseconds()
+
+	utils.Green.Printf("\nImages saved on %s (%dms)\n", to, elapsed)
 }

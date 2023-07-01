@@ -42,12 +42,6 @@ func DownloadAndSave(resourceUrl, savePath string) {
 
 	defer response.Body.Close()
 
-	err = os.MkdirAll(savePath, 0755)
-
-	if err != nil {
-		panic(err)
-	}
-
 	contentType := response.Header.Get("Content-Type")
 	isImage := strings.Split(contentType, "/")[0] == "image"
 
