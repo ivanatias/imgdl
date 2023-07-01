@@ -33,7 +33,7 @@ func getFilename(urlString string) (string, error) {
 	return matches[0], nil
 }
 
-func DownloadAndSave(resourceUrl, savePath string) {
+func DownloadAndSave(resourceUrl, savePath string, imgCount *int) {
 	response, err := http.Get(resourceUrl)
 
 	if err != nil {
@@ -81,4 +81,6 @@ func DownloadAndSave(resourceUrl, savePath string) {
 	}
 
 	colors.Cyan.Printf("Saved %s\n", imageFilename)
+
+	*imgCount++
 }

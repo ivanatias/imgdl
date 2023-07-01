@@ -64,6 +64,8 @@ func main() {
 
 	var wg sync.WaitGroup
 
+	imgCount := 0
+
 	for scanner.Scan() {
 		imageUrl := scanner.Text()
 
@@ -72,7 +74,7 @@ func main() {
 		go func(url string) {
 			defer wg.Done()
 
-			utils.DownloadAndSave(url, to)
+			utils.DownloadAndSave(url, to, &imgCount)
 
 		}(imageUrl)
 	}
@@ -81,5 +83,5 @@ func main() {
 
 	elapsed := time.Since(now).Milliseconds()
 
-	colors.Green.Printf("\nImages saved on %s (%dms)\n", to, elapsed)
+	colors.Green.Printf("\n%d images saved on %s (%dms)\n", imgCount, to, elapsed)
 }
